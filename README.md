@@ -3,6 +3,11 @@
 Provides Sprockets implementation for Rails 4.x (and beyond) Asset Pipeline.
 
 
+## GitHub Fork
+
+This is a @github fork of the [sprockets-rails](https://github.com/rails/sprockets-rails) plugin design for Rails 3.2 compatibility. Once github.com upgrades to Rails 4, this fork will be abandoned.
+
+
 ## Installation
 
 ``` ruby

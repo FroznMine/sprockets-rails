@@ -4,8 +4,15 @@ require 'sprockets'
 module Sprockets
   module Rails
     module Context
-      include ActionView::Helpers::AssetUrlHelper
-      include ActionView::Helpers::AssetTagHelper
+      if defined? ActionView::Helpers::AssetUrlHelper
+        include ActionView::Helpers::AssetUrlHelper
+        include ActionView::Helpers::AssetTagHelper
+      else
+        require 'sprockets/rails/legacy_asset_tag_helper'
+        require 'sprockets/rails/legacy_asset_url_helper'
+        include LegacyAssetTagHelper
+        include LegacyAssetUrlHelper
+      end
 
       def self.included(klass)
         klass.class_eval do

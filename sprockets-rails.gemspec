@@ -12,9 +12,9 @@ Gem::Specification.new do |s|
   s.files = Dir["README.md", "lib/**/*.rb", "LICENSE"]
 
   s.add_dependency "sprockets", ">= 3.0.0.beta", "< 4.0"
-  s.add_dependency "actionpack", ">= 4.0"
-  s.add_dependency "activesupport", ">= 4.0"
-  s.add_development_dependency "railties", ">= 4.0"
+  s.add_dependency "actionpack", ">= 3.2"
+  s.add_dependency "activesupport", ">= 3.2"
+  s.add_development_dependency "railties", ">= 3.2"
   s.add_development_dependency "rake"
   s.add_development_dependency "sass"
   s.add_development_dependency "uglifier"

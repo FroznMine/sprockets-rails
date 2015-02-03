@@ -51,7 +51,7 @@ class TestRailtie < TestBoot
     assert_kind_of Sprockets::Environment, env
 
     assert_equal ROOT, env.root
-    assert_equal "test-test--#{Sprockets::Rails::VERSION}", env.version
+    assert_equal "test--#{Sprockets::Rails::VERSION}", env.version
     assert env.cache
     assert_equal [], env.paths
     assert_nil env.js_compressor
@@ -137,7 +137,7 @@ class TestRailtie < TestBoot
     app.initialize!
 
     assert env = app.assets
-    assert_equal "test-test-v2-#{Sprockets::Rails::VERSION}", env.version
+    assert_equal "test-v2-#{Sprockets::Rails::VERSION}", env.version
   end
 
   def test_version_fragments_with_string_asset_host
@@ -149,7 +149,7 @@ class TestRailtie < TestBoot
     app.initialize!
 
     assert env = app.assets
-    assert_equal "test-test-v2-some-path-http://some-cdn.com-#{Sprockets::Rails::VERSION}", env.version
+    assert_equal "test-v2-some-path-http://some-cdn.com-#{Sprockets::Rails::VERSION}", env.version
   end
 
   def test_version_fragments_with_proc_asset_host
@@ -163,7 +163,7 @@ class TestRailtie < TestBoot
     app.initialize!
 
     assert env = app.assets
-    assert_equal "test-test-v2-some-path-#{Sprockets::Rails::VERSION}", env.version
+    assert_equal "test-v2-some-path-#{Sprockets::Rails::VERSION}", env.version
   end
 
   def test_configure
@@ -202,7 +202,7 @@ class TestRailtie < TestBoot
     assert app.assets.paths.include?(FIXTURES_PATH)
 
     assert_equal false, ActionView::Base.debug_assets
-    assert_equal false, ActionView::Base.digest_assets
+    assert_equal true, ActionView::Base.digest_assets
     assert_equal "/assets", ActionView::Base.assets_prefix
     assert_equal app.assets, ActionView::Base.assets_environment
     assert_equal app.assets_manifest, ActionView::Base.assets_manifest
@@ -210,7 +210,7 @@ class TestRailtie < TestBoot
 
     @view = ActionView::Base.new
     assert_equal "/javascripts/xmlhr.js", @view.javascript_path("xmlhr")
-    assert_equal "/assets/foo.js", @view.javascript_path("foo")
+    assert_equal "/assets/foo-4ef5541f349f7ed5a0d6b71f2fa4c82745ca106ae02f212aea5129726ac6f6ab.js", @view.javascript_path("foo")
 
     env = @view.assets_environment
     assert_kind_of Sprockets::CachedEnvironment, env
@@ -239,7 +239,7 @@ class TestRailtie < TestBoot
 
     assert env = app.assets
     assert_equal "/assets", env.context_class.assets_prefix
-    assert_equal false, env.context_class.digest_assets
+    assert_equal true, env.context_class.digest_assets
     assert_equal nil, env.context_class.config.asset_host
   end
 

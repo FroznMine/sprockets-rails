@@ -61,7 +61,7 @@ module Sprockets
     config.assets.version     = ""
     config.assets.debug       = false
     config.assets.compile     = true
-    config.assets.digest      = false
+    config.assets.digest      = true
     config.assets.cache_limit = 50.megabytes
 
     rake_tasks do |app|
@@ -92,7 +92,6 @@ module Sprockets
       # the Sprockets cache when changed.
       env.version = [
         ::Rails.env,
-        ::Rails.env, # TODO: Remove duplicate key
         config.assets.version,
         config.action_controller.relative_url_root,
         (config.action_controller.asset_host unless config.action_controller.asset_host.respond_to?(:call)),

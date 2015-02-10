@@ -131,7 +131,12 @@ module Sprockets
       def javascript_include_tag(*sources)
         options = sources.extract_options!.stringify_keys
 
-        if options["integrity"] == true
+        unless request_ssl?
+          options.delete("integrity")
+        end
+
+        case options["integrity"]
+        when true, false, nil
           compute_integrity = options.delete("integrity")
         end
 
@@ -160,7 +165,12 @@ module Sprockets
       def stylesheet_link_tag(*sources)
         options = sources.extract_options!.stringify_keys
 
-        if options["integrity"] == true
+        unless request_ssl?
+          options.delete("integrity")
+        end
+
+        case options["integrity"]
+        when true, false, nil
           compute_integrity = options.delete("integrity")
         end
 
@@ -184,6 +194,10 @@ module Sprockets
       end
 
       protected
+        def request_ssl?
+          respond_to?(:request) && self.request && self.request.ssl?
+        end
+
         # Enable split asset debugging. Eventually will be deprecated
         # and replaced by source maps in Sprockets 3.x.
         def request_debug_assets?

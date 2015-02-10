@@ -105,6 +105,7 @@ module Sprockets
     end
 
     def build_environment(app, initialized = nil)
+      initialized = true unless app.respond_to?(:initialized?)
       initialized = app.initialized? if initialized.nil?
       unless initialized
         ::Rails.logger.warn "Application uninitialized: Try calling YourApp::Application.initialize!"

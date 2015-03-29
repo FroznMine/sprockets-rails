@@ -228,20 +228,12 @@ module Sprockets
         def precompiled_assets
           @precompiled_assets ||= begin
             assets = Set.new
-
-            filters = (assets_precompile || []).map { |f|
-              Sprockets::Manifest.compile_match_filter(f)
-            }
-
             env = assets_environment
-            env.logical_paths do |logical_path, filename|
-              if filters.any? { |f| f.call(logical_path, filename) }
-                env.find_all_linked_assets(filename) do |asset|
-                  assets << asset
-                end
+            assets_precompile.each do |path|
+              env.find_all_linked_assets(path) do |asset|
+                assets << asset
               end
             end
-
             assets
           end
         end

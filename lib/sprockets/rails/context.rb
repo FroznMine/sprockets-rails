@@ -24,7 +24,7 @@ module Sprockets
         @dependencies << 'actioncontroller-asset-url-config'
 
         begin
-          asset_uri = resolve(path, compat: false)
+          asset_uri = resolve(path)
         rescue FileNotFound
           # TODO: eh, we should be able to use a form of locate that returns
           # nil instead of raising an exception.

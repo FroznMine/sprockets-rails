@@ -112,6 +112,7 @@ class TestTask < Minitest::Test
     new_path = path.join("../foo-modified.js")
 
     FileUtils.cp(path, new_path)
+    FileUtils.touch(new_path, :mtime => Time.now - 3600)
 
     assert File.exist?(new_path)
     digest_path = @assets['foo-modified.js'].digest_path

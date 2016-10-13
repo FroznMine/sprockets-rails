@@ -36,17 +36,28 @@ class HelperTest < ActionView::TestCase
     @assets.context_class.config        = @view.config
 
     @foo_js_digest  = @assets['foo.js'].digest
+    @foo_js_integrity = @assets['foo.js'].integrity
     @foo_css_digest = @assets['foo.css'].digest
+    @foo_css_integrity = @assets['foo.css'].integrity
     @bar_js_digest  = @assets['bar.js'].digest
+    @bar_js_debug_digest = @assets['bar.self.js'].digest
+    @bar_js_integrity = @assets['bar.js'].integrity
     @bar_css_digest = @assets['bar.css'].digest
+    @bar_css_debug_digest = @assets['bar.self.css'].digest
+    @bar_css_integrity = @assets['bar.css'].integrity
     @logo_digest    = @assets['logo.png'].digest
 
     @dependency_js_digest  = @assets['dependency.js'].digest
+    @dependency_js_debug_digest = @assets['dependency.self.js'].digest
     @dependency_css_digest = @assets['dependency.css'].digest
     @file1_js_digest       = @assets['file1.js'].digest
+    @file1_js_debug_digest = @assets['file1.self.js'].digest
     @file1_css_digest      = @assets['file1.css'].digest
+    @file1_css_debug_digest = @assets['file1.self.css'].digest
     @file2_js_digest       = @assets['file2.js'].digest
+    @file2_js_debug_digest = @assets['file2.self.js'].digest
     @file2_css_digest      = @assets['file2.css'].digest
+    @file2_css_debug_digest = @assets['file2.self.css'].digest
   end
 
   def test_truth
@@ -364,14 +375,14 @@ class DigestHelperTest < NoHostHelperTest
     assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js"></script>),
       @view.javascript_include_tag("foo", integrity: nil)
 
-    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js" integrity="ni:///sha-256;TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs?ct=application/javascript"></script>),
+    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js" integrity="#{@foo_js_integrity}"></script>),
       @view.javascript_include_tag("foo", integrity: true)
-    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js" integrity="ni:///sha-256;TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs?ct=application/javascript"></script>),
+    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js" integrity="#{@foo_js_integrity}"></script>),
       @view.javascript_include_tag("foo.js", integrity: true)
-    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js" integrity="ni:///sha-256;TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs?ct=application/javascript"></script>),
+    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js" integrity="#{@foo_js_integrity}"></script>),
       @view.javascript_include_tag(:foo, integrity: true)
 
-    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js" integrity="ni:///sha-256;TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs?ct=application/javascript"></script>\n<script src="/assets/bar-#{@bar_js_digest}.js" integrity="ni:///sha-256;g0JYFeYSYGXe376R0JrRzS6CpYpC1HiqtwBsVt_XAWU?ct=application/javascript"></script>),
+    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js" integrity="#{@foo_js_integrity}"></script>\n<script src="/assets/bar-#{@bar_js_digest}.js" integrity="#{@bar_js_integrity}"></script>),
       @view.javascript_include_tag(:foo, :bar, integrity: true)
   end
 
@@ -383,14 +394,14 @@ class DigestHelperTest < NoHostHelperTest
     assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" />),
       @view.stylesheet_link_tag("foo", integrity: nil)
 
-    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" integrity="ni:///sha-256;5YzTQPuOJz_EpeXfN_-v1sxsjAj_dw8q26abiHZM3A4?ct=text/css" />),
+    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" integrity="#{@foo_css_integrity}" />),
       @view.stylesheet_link_tag("foo", integrity: true)
-    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" integrity="ni:///sha-256;5YzTQPuOJz_EpeXfN_-v1sxsjAj_dw8q26abiHZM3A4?ct=text/css" />),
+    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" integrity="#{@foo_css_integrity}" />),
       @view.stylesheet_link_tag("foo.css", integrity: true)
-    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" integrity="ni:///sha-256;5YzTQPuOJz_EpeXfN_-v1sxsjAj_dw8q26abiHZM3A4?ct=text/css" />),
+    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" integrity="#{@foo_css_integrity}" />),
       @view.stylesheet_link_tag(:foo, integrity: true)
 
-    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" integrity="ni:///sha-256;5YzTQPuOJz_EpeXfN_-v1sxsjAj_dw8q26abiHZM3A4?ct=text/css" />\n<link href="/assets/bar-#{@bar_css_digest}.css" media="screen" rel="stylesheet" integrity="ni:///sha-256;Vd370-VAW4D96CVpZcjFLXyeHoagI0VHwofmzRXetuE?ct=text/css" />),
+    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css" media="screen" rel="stylesheet" integrity="#{@foo_css_integrity}" />\n<link href="/assets/bar-#{@bar_css_digest}.css" media="screen" rel="stylesheet" integrity="#{@bar_css_integrity}" />),
       @view.stylesheet_link_tag(:foo, :bar, integrity: true)
   end
 
@@ -428,11 +439,11 @@ class DebugHelperTest < NoHostHelperTest
   def test_javascript_include_tag
     super
 
-    assert_dom_equal %(<script src="/assets/foo.js?body=1"></script>),
+    assert_dom_equal %(<script src="/assets/foo.self.js?body=1"></script>),
       @view.javascript_include_tag(:foo)
-    assert_dom_equal %(<script src="/assets/foo.js?body=1"></script>\n<script src="/assets/bar.js?body=1"></script>),
+    assert_dom_equal %(<script src="/assets/foo.self.js?body=1"></script>\n<script src="/assets/bar.self.js?body=1"></script>),
       @view.javascript_include_tag(:bar)
-    assert_dom_equal %(<script src="/assets/dependency.js?body=1"></script>\n<script src="/assets/file1.js?body=1"></script>\n<script src="/assets/file2.js?body=1"></script>),
+    assert_dom_equal %(<script src="/assets/dependency.self.js?body=1"></script>\n<script src="/assets/file1.self.js?body=1"></script>\n<script src="/assets/file2.self.js?body=1"></script>),
       @view.javascript_include_tag(:file1, :file2)
 
     assert_servable_asset_url "/assets/foo.js?body=1"
@@ -445,11 +456,11 @@ class DebugHelperTest < NoHostHelperTest
   def test_stylesheet_link_tag
     super
 
-    assert_dom_equal %(<link href="/assets/foo.css?body=1" media="screen" rel="stylesheet" />),
+    assert_dom_equal %(<link href="/assets/foo.self.css?body=1" media="screen" rel="stylesheet" />),
       @view.stylesheet_link_tag(:foo)
-    assert_dom_equal %(<link href="/assets/foo.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/bar.css?body=1" media="screen" rel="stylesheet" />),
+    assert_dom_equal %(<link href="/assets/foo.self.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/bar.self.css?body=1" media="screen" rel="stylesheet" />),
       @view.stylesheet_link_tag(:bar)
-    assert_dom_equal %(<link href="/assets/dependency.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/file1.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/file2.css?body=1" media="screen" rel="stylesheet" />),
+    assert_dom_equal %(<link href="/assets/dependency.self.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/file1.self.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/file2.self.css?body=1" media="screen" rel="stylesheet" />),
       @view.stylesheet_link_tag(:file1, :file2)
 
     assert_servable_asset_url "/assets/foo.css?body=1"
@@ -485,11 +496,11 @@ class DebugDigestHelperTest < NoHostHelperTest
   def test_javascript_include_tag
     super
 
-    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js?body=1"></script>),
+    assert_dom_equal %(<script src="/assets/foo.self-#{@foo_js_digest}.js?body=1"></script>),
       @view.javascript_include_tag(:foo)
-    assert_dom_equal %(<script src="/assets/foo-#{@foo_js_digest}.js?body=1"></script>\n<script src="/assets/bar-#{@bar_js_digest}.js?body=1"></script>),
+    assert_dom_equal %(<script src="/assets/foo.self-#{@foo_js_digest}.js?body=1"></script>\n<script src="/assets/bar.self-#{@bar_js_debug_digest}.js?body=1"></script>),
       @view.javascript_include_tag(:bar)
-    assert_dom_equal %(<script src="/assets/dependency-#{@dependency_js_digest}.js?body=1"></script>\n<script src="/assets/file1-#{@file1_js_digest}.js?body=1"></script>\n<script src="/assets/file2-#{@file1_js_digest}.js?body=1"></script>),
+    assert_dom_equal %(<script src="/assets/dependency.self-#{@dependency_js_debug_digest}.js?body=1"></script>\n<script src="/assets/file1.self-#{@file1_js_debug_digest}.js?body=1"></script>\n<script src="/assets/file2.self-#{@file2_js_debug_digest}.js?body=1"></script>),
       @view.javascript_include_tag(:file1, :file2)
 
     assert_servable_asset_url "/assets/foo-#{@foo_js_digest}.js?body=1"
@@ -502,11 +513,11 @@ class DebugDigestHelperTest < NoHostHelperTest
   def test_stylesheet_link_tag
     super
 
-    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css?body=1" media="screen" rel="stylesheet" />),
+    assert_dom_equal %(<link href="/assets/foo.self-#{@foo_css_digest}.css?body=1" media="screen" rel="stylesheet" />),
       @view.stylesheet_link_tag(:foo)
-    assert_dom_equal %(<link href="/assets/foo-#{@foo_css_digest}.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/bar-#{@bar_css_digest}.css?body=1" media="screen" rel="stylesheet" />),
+    assert_dom_equal %(<link href="/assets/foo.self-#{@foo_css_digest}.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/bar.self-#{@bar_css_debug_digest}.css?body=1" media="screen" rel="stylesheet" />),
       @view.stylesheet_link_tag(:bar)
-    assert_dom_equal %(<link href="/assets/dependency-#{@dependency_css_digest}.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/file1-#{@file1_css_digest}.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/file2-#{@file2_css_digest}.css?body=1" media="screen" rel="stylesheet" />),
+    assert_dom_equal %(<link href="/assets/dependency.self-#{@dependency_css_digest}.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/file1.self-#{@file1_css_debug_digest}.css?body=1" media="screen" rel="stylesheet" />\n<link href="/assets/file2.self-#{@file2_css_debug_digest}.css?body=1" media="screen" rel="stylesheet" />),
       @view.stylesheet_link_tag(:file1, :file2)
 
     assert_servable_asset_url "/assets/foo-#{@foo_css_digest}.css?body=1"

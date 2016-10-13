@@ -11,13 +11,10 @@ Gem::Specification.new do |s|
 
   s.files = Dir["README.md", "lib/**/*.rb", "LICENSE"]
 
-  s.add_dependency "sprockets", ">= 3.0.0.beta", "< 4.0"
+  s.add_dependency "sprockets", ">= 3.0.0", "< 4.0.0.a"
   s.add_dependency "actionpack", ">= 3.2"
   s.add_dependency "activesupport", ">= 3.2"
-  s.add_development_dependency "railties", ">= 3.2"
-  s.add_development_dependency "rake"
-  s.add_development_dependency "sass"
-  s.add_development_dependency "uglifier"
+  s.add_development_dependency "rake", "~> 10.5.0"
 
   s.author = "Joshua Peek"
   s.email  = "josh@joshpeek.com"

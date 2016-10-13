@@ -44,6 +44,7 @@ class HelperTest < ActionView::TestCase
     @logo_digest    = @assets['logo.png'].digest
 
     @dependency_js_digest  = @assets['dependency.js'].digest
+    @dependency_js_debug_digest = @assets['dependency.self.js'].digest
     @dependency_css_digest = @assets['dependency.css'].digest
     @file1_js_digest       = @assets['file1.js'].digest
     @file1_js_debug_digest = @assets['file1.self.js'].digest
@@ -495,7 +496,7 @@ class DebugDigestHelperTest < NoHostHelperTest
       @view.javascript_include_tag(:foo)
     assert_dom_equal %(<script src="/assets/foo.self-#{@foo_js_digest}.js?body=1"></script>\n<script src="/assets/bar.self-#{@bar_js_debug_digest}.js?body=1"></script>),
       @view.javascript_include_tag(:bar)
-    assert_dom_equal %(<script src="/assets/dependency.self-#{@dependency_js_digest}.js?body=1"></script>\n<script src="/assets/file1.self-#{@file1_js_debug_digest}.js?body=1"></script>\n<script src="/assets/file2.self-#{@file2_js_debug_digest}.js?body=1"></script>),
+    assert_dom_equal %(<script src="/assets/dependency.self-#{@dependency_js_debug_digest}.js?body=1"></script>\n<script src="/assets/file1.self-#{@file1_js_debug_digest}.js?body=1"></script>\n<script src="/assets/file2.self-#{@file2_js_debug_digest}.js?body=1"></script>),
       @view.javascript_include_tag(:file1, :file2)
 
     assert_servable_asset_url "/assets/foo-#{@foo_js_digest}.js?body=1"

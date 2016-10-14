@@ -86,11 +86,6 @@ module Sprockets
 
         if environment = assets_environment
           if asset = environment[path]
-            unless options[:debug]
-              if !precompiled_assets.include?(asset)
-                raise AssetNotPrecompiled.new(asset.logical_path)
-              end
-            end
             return asset.digest_path
           end
         end
@@ -215,13 +210,7 @@ module Sprockets
             path = "#{path}#{extname}"
           end
 
-          if asset = env[path]
-            if !precompiled_assets.include?(asset)
-              raise AssetNotPrecompiled.new(asset.logical_path)
-            end
-          end
-
-          asset
+          env[path]
         end
 
         # Internal: Generate a Set of all precompiled assets.
